@@ -1,17 +1,25 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
+    protected $products;
+
+    public function __construct(){
+        $this->products = new Product();
+    }
+
     public function index()
     {
-        //
+        $products = $this->products->all();
+        $categories = Category::pluck('name','id');
+
+        return view('pages.product.index',compact('products','categories'));
     }
 
     /**
