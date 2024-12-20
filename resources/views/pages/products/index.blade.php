@@ -19,7 +19,7 @@
                             <div class="col-md-6">
                                 <label>Category</label></br>
                                 <select name="cat_id" id="cat_id" class="form-control">
-                                    @foreach ($categories as $id->name)
+                                    @foreach ($categories as $id => $name)
                                         <option value="{{ $id }}">{{ $name }}</option>
                                     @endforeach
 
@@ -64,9 +64,18 @@
                     <tbody>
                         @foreach ($products as $key => $product)
                             <tr>
-                                <td scope="vol">{{ ++$key }}</td>
-                                <td scope="vol">{{ $product->name }}</td>
-
+                                <td scope="col">{{ ++$key }}</td>
+                                <td scope="col">{{ $product->productname }}</td>
+                                <td scope="col">{{ $product->category->name }}</td>
+                                <td scope="col">{{ $product->price }}</td>
+                                <td scope="col">
+                                    @if ($product->photo)
+                                        <img src="{{ asset('images/' . $product->photo) }}" alt="product image"
+                                            width="50px">
+                                    @else
+                                        <img src="{{ asset('images/no-image.png') }}" alt="product image" width="50px">
+                                    @endif
+                                </td>
                                 <td scope="col">
                                     <a href="{{ route('product.edit', $product->id) }}">
                                         <button class="btn btn-primary btn-sm">

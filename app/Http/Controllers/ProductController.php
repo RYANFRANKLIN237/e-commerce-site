@@ -19,7 +19,7 @@ class ProductController extends Controller
         $products = $this->products->all();
         $categories = Category::pluck('name','id');
 
-        return view('pages.product.index',compact('products','categories'));
+        return view('pages.products.index',compact('products','categories'));
     }
 
     /**
@@ -35,7 +35,24 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validateData = $request->validate([
+            'productname' => 'required',
+            'cat_id' => 'required',
+            'description' => 'required',
+            'price' => 'required',
+            'photo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048', //allow enxtension types for images and size of image
+        ]);
+
+        //check if file was uploaded successfully
+        if($request->hasFile('photo')){
+           $filename = time().$request->file('photo')->getClientOriginalName();
+           $request->file('photo')->move(public_path('images'),$filename);
+              $validateData['photo'] = $filename;
+
+        }
+
+        Product::create($validateData);
+        return redirect()->back();
     }
 
     /**
